@@ -55,11 +55,14 @@ function createDomainCard(domainObj, isPremium) {
         ? domainObj.features.map(feat => `<li>${feat}</li>`).join('') 
         : `<li>نقل ملكية فوري</li><li>دفع آمن تماماً</li>`;
         
+    const badge = isPremium ? `<div class="premium-badge">SUPER PREMIUM</div>` : '';
+        
     return `
-        <div class="domain-card ${isPremium ? 'premium-card' : ''}">
-            <div class="domain-name">${domainObj.domain}</div>
-            <div class="domain-price">${domainObj.price}</div>
-            <ul class="domain-features">
+        <div class="domain-card glass-panel ${isPremium ? 'premium-card' : ''}">
+            ${badge}
+            <div class="card-domain-name">${domainObj.domain}</div>
+            <div class="card-price">${domainObj.price}</div>
+            <ul class="card-features">
                 ${featuresHtml}
             </ul>
             <a href="${domainObj.link}" target="_blank" rel="noopener noreferrer" class="btn-buy">
