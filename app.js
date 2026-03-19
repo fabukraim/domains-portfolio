@@ -39,7 +39,7 @@ function parseCSV(csvText) {
         const currentLine = lines[i].split(',');
         result.push({
             domain: currentLine[0] ? currentLine[0].trim() : '',
-            price: currentLine[1] ? currentLine[1].trim() : 'متوفر للبيع',
+            price: currentLine[1] ? currentLine[1].trim() : 'Available',
             link: currentLine[2] ? currentLine[2].trim() : '#',
             features: currentLine[3] ? currentLine.slice(3).map(f => f.replace(/[\r\n"']/g, '').trim()).filter(f=>f) : []
         });
@@ -53,7 +53,7 @@ function parseCSV(csvText) {
 function createDomainCard(domainObj, isPremium) {
     const featuresHtml = (domainObj.features && domainObj.features.length) 
         ? domainObj.features.map(feat => `<li>${feat}</li>`).join('') 
-        : `<li>نقل ملكية فوري</li><li>دفع آمن تماماً</li>`;
+        : `<li>Instant Ownership Transfer</li><li>100% Secure Checkout</li>`;
         
     const badge = isPremium ? `<div class="premium-badge">SUPER PREMIUM</div>` : '';
         
@@ -66,7 +66,7 @@ function createDomainCard(domainObj, isPremium) {
                 ${featuresHtml}
             </ul>
             <a href="${domainObj.link}" target="_blank" rel="noopener noreferrer" class="btn-buy">
-                ${isPremium ? 'قدم عرضك الآن' : 'شراء النطاق'}
+                ${isPremium ? 'Make an Offer' : 'Buy Now'}
             </a>
         </div>
     `;
@@ -80,7 +80,7 @@ function renderDomains(domains, gridElementId, isPremium) {
     if (!grid) return;
     
     if (domains.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color: var(--text-secondary);">لا توجد نطاقات مطابقة.</p>`;
+        grid.innerHTML = `<p style="text-align:center; grid-column: 1/-1; color: var(--text-muted);">No domains found matching criteria.</p>`;
         return;
     }
     
