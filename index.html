@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسوق النطاقات المميزة - DomainID</title>
+    <meta name="description" content="استكشف مجموعتنا الحصرية من النطاقات المميزة المعروضة للبيع. استثمر في هويتك الرقمية اليوم.">
+    <!-- Google Fonts: Cairo for Arabic, Inter for English domains -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Glow Effects -->
+    <div class="glow-bg glow-bg-1"></div>
+    <div class="glow-bg glow-bg-2"></div>
+
+    <header class="navbar glass">
+        <div class="container nav-content">
+            <div class="logo">Domain<span>ID</span></div>
+            <nav>
+                <a href="#premium">المميزة</a>
+                <a href="#all">كل النطاقات</a>
+                <a href="articles/index.html">المقالات</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <h1>امتلك <span class="gradient-text">هويتك الرقمية</span> المثالية اليوم</h1>
+            <p>نقدم لك تشكيلة من أندر وأقوى النطاقات (Domains) التي ستنقل أعمالك إلى مستوى آخر من الاحترافية.</p>
+            <div class="search-box glass">
+                <input type="text" id="searchInput" placeholder="ابحث عن نطاق (مثال: premium.com)...">
+                <button type="button" class="btn-primary" id="searchBtn">ابحث</button>
+            </div>
+        </section>
+
+        <section id="premium" class="premium-section container">
+            <div class="section-header">
+                <h2>النطاقات المميزة 🔥</h2>
+                <p>نطاقات حصرية ذات قيمة استثمارية عالية جداً</p>
+            </div>
+            <div class="loader" id="premiumLoader">جاري تحميل النطاقات...</div>
+            <div class="grid" id="premiumGrid">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <section id="all" class="all-domains-section container">
+            <div class="section-header">
+                <h2>استكشف كل النطاقات</h2>
+                <p>تصفح قائمتنا الكاملة من النطاقات المعروضة للبيع بتشكيلة واسعة وأسعار تنافسية</p>
+            </div>
+            <div class="loader" id="allLoader">جاري تحميل النطاقات...</div>
+            <div class="grid" id="allGrid">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass">
+        <div class="container footer-content">
+            <p>&copy; 2026 DomainID. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
