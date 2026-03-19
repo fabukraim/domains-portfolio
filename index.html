@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google tag (gtag.js) Placeholder -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <title>Premium Domain Portfolio - DomainID</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -44,6 +54,31 @@
             </div>
         </section>
 
+        <!-- Why Choose Us -->
+        <section class="section" id="why-us">
+            <div class="section-title-wrapper">
+                <h2 class="section-title">Why Choose <span class="gradient-text">Us?</span></h2>
+                <p class="section-desc">Experience a seamless, secure, and instant domain acquisition process.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px;">
+                <div class="glass-panel" style="padding: 40px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">⚡</div>
+                    <h3 style="color: var(--text-pure); font-size: 1.5rem; margin-bottom: 15px; font-family: 'Outfit';">Instant Transfer</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">Gain full control of your new domain within minutes of purchase.</p>
+                </div>
+                <div class="glass-panel" style="padding: 40px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🔒</div>
+                    <h3 style="color: var(--text-pure); font-size: 1.5rem; margin-bottom: 15px; font-family: 'Outfit';">Secure Checkout</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">All transactions are protected by industry-leading escrow services.</p>
+                </div>
+                <div class="glass-panel" style="padding: 40px; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🤝</div>
+                    <h3 style="color: var(--text-pure); font-size: 1.5rem; margin-bottom: 15px; font-family: 'Outfit';">Expert Support</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: 1rem;">Dedicated assistance to help you secure the perfect brand asset.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Premium Domains -->
         <section id="premium" class="section container">
             <div class="section-title-wrapper">
@@ -64,10 +99,20 @@
                 <p class="section-desc">Browse our complete inventory with competitive pricing for every project</p>
             </div>
             
-            <div class="loader" id="allLoader">
-                <div class="spinner"></div> Loading...
+            <div class="domain-grid" id="allGrid">
+                <!-- All domains data will be injected here -->
             </div>
-            <div class="grid" id="allGrid"></div>
+        </section>
+
+        <!-- Recently Sold -->
+        <section class="section" id="recently-sold" style="border-top: 1px solid var(--glass-border); padding-top: 80px;">
+            <div class="section-title-wrapper">
+                <h2 class="section-title">Recently <span class="gradient-text">Sold</span></h2>
+                <p class="section-desc">Premium assets successfully acquired by forward-thinking brands.</p>
+            </div>
+            <div class="domain-grid" id="soldGrid" style="opacity: 0.6; pointer-events: none; filter: grayscale(80%);">
+                <!-- Sold domains data will be injected here -->
+            </div>
         </section>
     </main>
 

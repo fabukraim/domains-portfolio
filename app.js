@@ -14,16 +14,23 @@ let allDomains = [];
 
 // Fallback/Mock Data if user hasn't provided their CSV URL yet or if fetch fails
 const MOCK_PREMIUM = [
-    { domain: "cryptoarab.com", price: "$15,000", link: "#", features: ["كلمة قوية ومطلوبة", "امتداد .com المميز", "تاريخ نظيف"] },
-    { domain: "aibusiness.ai", price: "$8,500", link: "#", features: ["امتداد الذكاء الاصطناعي", "سهل التذكر", "مستقبل تقني"] },
-    { domain: "riyadh.store", price: "$5,000", link: "#", features: ["استهداف جغرافي", "مناسب للتجارة الإلكترونية", "قصير"] }
+    { title: 'Meta.com', description: 'Ultra premium short domain for tech giants.', link: '#' },
+    { title: 'Crypto.net', description: 'Perfect for the next big cryptocurrency project.', link: '#' },
+    { title: 'AI.org', description: 'Prime domain for open-source AI initiatives.', link: '#' }
 ];
 
 const MOCK_ALL = [
-    { domain: "techsaudi.net", price: "$499", link: "#", features: ["تقنية"] },
-    { domain: "smartgulf.io", price: "$850", link: "#", features: ["تطبيقات، أعمال"] },
-    { domain: "halalfood.com", price: "$3,200", link: "#", features: ["أغذية، تجارة"] },
-    { domain: "dubai-cars.online", price: "$299", link: "#", features: ["سيارات، دبي"] },
+    { title: 'TechStartup.com', description: 'Catchy and highly brandable startup name.', link: '#' },
+    { title: 'FoodDelivery.app', description: 'Great for food delivery aggregators.', link: '#' },
+    { title: 'CloudStorage.io', description: 'Ideal for modern cloud infrastructure.', link: '#' },
+    { title: 'FinancePro.com', description: 'The absolute best name for financial services.', link: '#' },
+    { title: 'SmartHome.net', description: 'Perfect for smart home automation.', link: '#' }
+];
+
+const MOCK_SOLD = [
+    { title: 'GulfVentures.com', description: 'Acquired for an undisclosed amount.', link: '#' },
+    { title: 'DubaiTech.net', description: 'Sold to a Dubai-based holding group.', link: '#' },
+    { title: 'ArabShop.com', description: 'Bought by an e-commerce giant.', link: '#' }
 ];
 
 /**
@@ -33,15 +40,14 @@ function parseCSV(csvText) {
     const lines = csvText.split('\n');
     const result = [];
     
-    // We expect columns: [domain, price, link, features...]
+    // We expect columns: [Title, Description, Link]
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue;
         const currentLine = lines[i].split(',');
         result.push({
-            domain: currentLine[0] ? currentLine[0].trim() : '',
-            price: currentLine[1] ? currentLine[1].trim() : 'Available',
-            link: currentLine[2] ? currentLine[2].trim() : '#',
-            features: currentLine[3] ? currentLine.slice(3).map(f => f.replace(/[\r\n"']/g, '').trim()).filter(f=>f) : []
+            title: currentLine[0] ? currentLine[0].trim() : '',
+            description: currentLine[1] ? currentLine[1].trim() : 'A premium digital asset.',
+            link: currentLine[2] ? currentLine[2].trim() : '#'
         });
     }
     return result;
@@ -50,26 +56,34 @@ function parseCSV(csvText) {
 /**
  * Creates the HTML for a single Domain Card
  */
-function createDomainCard(domainObj, isPremium) {
-    const featuresHtml = (domainObj.features && domainObj.features.length) 
-        ? domainObj.features.map(feat => `<li>${feat}</li>`).join('') 
-        : `<li>Instant Ownership Transfer</li><li>100% Secure Checkout</li>`;
-        
-    const badge = isPremium ? `<div class="premium-badge">SUPER PREMIUM</div>` : '';
-        
-    return `
-        <div class="domain-card glass-panel ${isPremium ? 'premium-card' : ''}">
-            ${badge}
-            <div class="card-domain-name">${domainObj.domain}</div>
-            <div class="card-price">${domainObj.price}</div>
-            <ul class="card-features">
-                ${featuresHtml}
-            </ul>
-            <a href="${domainObj.link}" target="_blank" rel="noopener noreferrer" class="btn-buy">
-                ${isPremium ? 'Make an Offer' : 'Buy Now'}
-            </a>
+function createDomainCard(domain, isPremium = false) {
+    const card = document.createElement('article');
+    card.className = 'domain-card glass-panel';
+    
+    // Support either traditional "domain" field or the new "title" field
+    const domainTitle = domain.title || domain.domain || 'Unknown.com';
+    const domainDescription = domain.description || domain.price || 'A premium digital asset.';
+    
+    card.innerHTML = `
+        <div class="domain-header" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                <h3 class="domain-name" style="font-size: 1.6rem; word-break: break-all;">${domainTitle}</h3>
+                ${isPremium ? '<span class="premium-badge">Premium</span>' : ''}
+            </div>
         </div>
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px; font-weight: normal; line-height: 1.6; flex-grow: 1;">
+            ${domainDescription}
+        </p>
+        <ul class="domain-features" style="margin-top: auto;">
+            <li><span class="gradient-text">✓</span> Instant Secure Transfer</li>
+            <li><span class="gradient-text">✓</span> 100% Buyer Protection</li>
+        </ul>
+        <a href="${domain.link || '#'}" target="_blank" class="btn-glow" style="width: 100%;">
+            ${isPremium ? 'Buy Now' : 'Make an Offer'}
+        </a>
     `;
+    
+    return card;
 }
 
 /**
@@ -84,7 +98,8 @@ function renderDomains(domains, gridElementId, isPremium) {
         return;
     }
     
-    grid.innerHTML = domains.map(d => createDomainCard(d, isPremium)).join('');
+    grid.innerHTML = ''; // Clear existing content
+    domains.forEach(d => grid.appendChild(createDomainCard(d, isPremium)));
 }
 
 /**
@@ -151,17 +166,24 @@ function handleSearch() {
     }
     
     const filteredPremium = premiumDomains.filter(d => 
-        d.domain.toLowerCase().includes(query) || 
-        d.features.some(f => f.toLowerCase().includes(query))
+        (d.title || d.domain || '').toLowerCase().includes(query) || 
+        (d.description || d.price || '').toLowerCase().includes(query)
     );
     
     const filteredAll = allDomains.filter(d => 
-        d.domain.toLowerCase().includes(query) || 
-        d.features.some(f => f.toLowerCase().includes(query))
+        (d.title || d.domain || '').toLowerCase().includes(query) || 
+        (d.description || d.price || '').toLowerCase().includes(query)
     );
     
     renderDomains(filteredPremium, 'premiumGrid', true);
     renderDomains(filteredAll, 'allGrid', false);
+    
+    // Render Recently Sold
+    const filteredSold = MOCK_SOLD.filter(d => 
+        (d.title || d.domain || '').toLowerCase().includes(query) || 
+        (d.description || d.price || '').toLowerCase().includes(query)
+    );
+    renderDomains(filteredSold, 'soldGrid', false);
 }
 
 // Event Listeners
