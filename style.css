@@ -117,6 +117,7 @@ body {
 .logo-accent {
     background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -172,6 +173,7 @@ body {
 .gradient-text {
     background: linear-gradient(to left, var(--accent-1), var(--accent-3));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -238,6 +240,10 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 .btn-glow:hover {
@@ -269,9 +275,25 @@ body {
 /* Grids & Cards */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 32px;
 }
+
+/* Specific styling for All Domains section */
+#allGrid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+#allGrid .btn-glow {
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
 
 .glass-panel {
     background: rgba(255, 255, 255, 0.02);
@@ -283,27 +305,58 @@ body {
 
 .domain-card {
     padding: 32px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     display: flex;
     flex-direction: column;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.domain-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    z-index: -1;
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 .domain-card:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .premium-card {
-    background: linear-gradient(180deg, rgba(240, 147, 251, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+    background: linear-gradient(180deg, rgba(240, 147, 251, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border: 1px solid rgba(240, 147, 251, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: linear-gradient(135deg, var(--accent-3), var(--accent-4));
+    z-index: -1;
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 .premium-card:hover {
-    border-color: rgba(240, 147, 251, 0.6);
-    box-shadow: 0 20px 50px rgba(240, 147, 251, 0.15);
+    border-color: rgba(240, 147, 251, 0.7);
+    box-shadow: 0 20px 60px rgba(240, 147, 251, 0.2);
+    transform: translateY(-12px) scale(1.02);
 }
 
 .premium-badge {
@@ -336,6 +389,7 @@ body {
     font-weight: 800;
     background: linear-gradient(to right, #00f2fe, #4facfe);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 24px;
     direction: ltr;
@@ -345,6 +399,7 @@ body {
 .premium-card .card-price {
     background: linear-gradient(to right, #f093fb, #f5576c);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
