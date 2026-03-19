@@ -36,17 +36,23 @@
                 <p class="section-desc">Have a question or want to negotiate a domain? Reach out today.</p>
             </div>
             <div class="glass-panel" style="max-width: 600px; margin: 0 auto; padding: 40px;">
-                <!-- Form doesn't have a backend yet, but ready for one -->
-                <form action="#" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
-                    <input type="text" placeholder="Your Full Name" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; font-size: 1.05rem;">
+                <!-- Free FormSubmit integration for static sites -->
+                <form action="https://formsubmit.co/domanid.com@gmail.com" method="POST" style="display: flex; flex-direction: column; gap: 20px;">
                     
-                    <input type="email" placeholder="Your Email Address" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; font-size: 1.05rem;">
+                    <!-- Advanced FormSubmit features -->
+                    <input type="hidden" name="_subject" value="New Domain Inquiry / Offer!">
+                    <input type="text" name="_honey" style="display:none"> <!-- Spam prevention -->
+                    <input type="hidden" name="_next" value="https://domanid.com/contact.html?submitted=true">
                     
-                    <input type="text" placeholder="Which Domain are you interested in?" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; font-size: 1.05rem;">
+                    <input type="text" name="Full Name" placeholder="Your Full Name" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; font-size: 1.05rem;">
                     
-                    <textarea placeholder="Your Message or Offer..." rows="5" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; resize: vertical; font-size: 1.05rem;"></textarea>
+                    <input type="email" name="Email Address" placeholder="Your Email Address" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; font-size: 1.05rem;">
                     
-                    <button type="button" onclick="alert('Thank you for your message! (Form submission is currently unlinked)')" class="btn-glow" style="width: 100%; margin-top: 10px;">Send Message</button>
+                    <input type="text" name="Domain Interested In" placeholder="Which Domain are you interested in?" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; font-size: 1.05rem;">
+                    
+                    <textarea name="Message" placeholder="Your Message or Offer..." rows="5" required style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; color: #fff; outline:none; font-family: 'Outfit'; resize: vertical; font-size: 1.05rem;"></textarea>
+                    
+                    <button type="submit" class="btn-glow" style="width: 100%; margin-top: 10px;">Send Message</button>
                 </form>
             </div>
         </section>
