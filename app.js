@@ -1,5 +1,5 @@
 /**
- * DomainID - Main Application Logic
+ * DomanID - Main Application Logic
  * Automatically fetches from Google Sheets CSVs and renders the domains dynamically.
  */
 
@@ -34,20 +34,57 @@ const MOCK_SOLD = [
 ];
 
 /**
- * Parses simple CSV content. 
+ * Parses CSV content professionally, handling quoted fields and commas inside text.
  */
 function parseCSV(csvText) {
-    const lines = csvText.split('\n');
+    const lines = csvText.split(/\r?\n/);
     const result = [];
     
-    // We expect columns: [Title, Description, Link]
+    // Simple but robust CSV line parser for quoted strings
+    const parseCSVLine = (text) => {
+        const row = [];
+        let inQuotes = false;
+        let currentValue = '';
+        
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            const nextChar = text[i + 1];
+            
+            if (char === '"' && inQuotes && nextChar === '"') {
+                currentValue += '"'; // Escaped quote
+                i++;
+            } else if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                row.push(currentValue.trim());
+                currentValue = '';
+            } else {
+                currentValue += char;
+            }
+        }
+        row.push(currentValue.trim());
+        return row;
+    };
+
+    // Skip header (i=0), process data lines
     for (let i = 1; i < lines.length; i++) {
         if (!lines[i].trim()) continue;
-        const currentLine = lines[i].split(',');
+        const columns = parseCSVLine(lines[i]);
+        
+        // We expect columns: [Title, Description, Link, ...]
+        // Clean and format the link
+        let rawLink = columns[2] || '#';
+        let formattedLink = rawLink;
+        
+        // If it's a domain name (no protocol and contains a dot), prepend https://
+        if (rawLink !== '#' && !rawLink.startsWith('http') && rawLink.includes('.')) {
+            formattedLink = `https://${rawLink}`;
+        }
+
         result.push({
-            title: currentLine[0] ? currentLine[0].trim() : '',
-            description: currentLine[1] ? currentLine[1].trim() : 'A premium digital asset.',
-            link: currentLine[2] ? currentLine[2].trim() : '#'
+            title: columns[0] || 'Unknown Domain',
+            description: columns[1] || 'A premium digital asset.',
+            link: formattedLink
         });
     }
     return result;
