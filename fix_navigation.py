@@ -10,15 +10,20 @@ if os.path.exists(articles_dir):
     for filename in os.listdir(articles_dir):
         if filename.endswith(".html"):
             filepath = os.path.join(articles_dir, filename)
-            with open(filepath, "r", encoding="utf-8") as f:
-                file_content = f.read()
+            # Try reading with utf-8 first, fallback to latin-1 if there's an encoding error
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    file_content = f.read()
+            except UnicodeDecodeError:
+                with open(filepath, "r", encoding="latin-1") as f:
+                    file_content = f.read()
             
             # Correct the path for app.js
-            # It replaces <script src="app.js"></script> with <script src="../app.js"></script>
             updated_content = file_content.replace('<script src="app.js"></script>', '<script src="../app.js"></script>')
             
             if updated_content != file_content:
-                with open(filepath, "w", encoding="utf-8") as f:
+                # Write back using the same logic (or just utf-8 which is safer)
+                with open(filepath, "w", encoding="utf-8", errors="replace") as f:
                     f.write(updated_content)
                 print(f"√ Fixed: {filename}")
             else:
