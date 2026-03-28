@@ -72,7 +72,7 @@ def update_index(articles):
         print("articles/index.html not found.")
         return
 
-    with open(INDEX_PATH, "r", encoding="utf-8") as f:
+    with open(INDEX_PATH, "r", encoding="utf-8", errors="replace") as f:
         content = f.read()
 
     grid_html = ""
@@ -102,7 +102,7 @@ def main():
             print(f"Error: {TEMPLATE_PATH} not found.")
             return
 
-        with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
+        with open(TEMPLATE_PATH, "r", encoding="utf-8", errors="replace") as f:
             template = f.read()
 
         print("Fetching blog data...")
@@ -112,7 +112,7 @@ def main():
         
         if not csv_data:
             if os.path.exists(LOCAL_CSV_PATH):
-                with open(LOCAL_CSV_PATH, "r", encoding="utf-8") as f:
+                with open(LOCAL_CSV_PATH, "r", encoding="utf-8", errors="replace") as f:
                     cr = csv.reader(f)
                     csv_data = list(cr)
             else:
