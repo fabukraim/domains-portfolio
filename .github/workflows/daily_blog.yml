@@ -33,6 +33,10 @@ jobs:
         python -c "import requests; print('Requests version:', requests.__version__)"
 
     - name: Run Blog Generator Script
+      env:
+        LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: python blog_generator.py
 
     - name: Commit and Push New Article

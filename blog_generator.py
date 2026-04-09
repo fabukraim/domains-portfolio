@@ -5,11 +5,17 @@ import re
 import io
 import traceback
 import sys
+import json
+import sys
 
 # --- CONFIGURATION ---
 BLOG_CSV_URL = "https://docs.google.com/spreadsheets/d/1PNIvLQsoyh6ssc5wEvtmB4K8eT9tyNmngeyRpa1rFbY/export?format=csv"
 APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwn9irH9UZbvX6b25lctzMIPeorl2926QLUfnwO_SxrOy3CnMCG5gtEH-OpSmjhpS5kw/exec"
 LOCAL_CSV_PATH = "blog_content.csv"
+
+LINKEDIN_ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN")
+LINKEDIN_AUTHOR_URN = os.environ.get("LINKEDIN_AUTHOR_URN")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 TEMPLATE_PATH = "article_template.html"
 ARTICLES_DIR = "articles"
@@ -66,6 +72,88 @@ def generate_article(row, template):
     
     print(f"Generated: {filepath}")
     return {"title": title, "slug": slug, "date": date, "excerpt": excerpt, "category": category}
+
+def generate_linkedin_post(content, article_url):
+    if not GEMINI_API_KEY:
+        print("GEMINI_API_KEY not found. Skipping LinkedIn summary generation.")
+        return None
+        
+    prompt = f"""
+قم بقراءة المقال التالي وتلخيصه في منشور جذاب على LinkedIn (حوالي 500 كلمة).
+استخدم أسلوب احترافي، أضف hook (سطر أول يجذب الانتباه)، وقم بتسليط الضوء على النقاط الرئيسية في المقال بأسلوب شيق يشجع القارئ على قراءة المقال الكامل.
+ضع فواصل ومسافات كافية بين الفقرات ليسهل قراءتها، وضع هاشتاقات مناسبة في النهاية.
+في نهاية المنشور، اكتب عبارة تدعو القارئ لمعرفة التفاصيل عبر الرابط. 
+
+المقال:
+{content}
+"""
+    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}]
+    }
+    
+    try:
+        response = requests.post(api_url, headers={"Content-Type": "application/json"}, json=payload, timeout=60)
+        response.raise_for_status()
+        data = response.json()
+        if "candidates" in data and len(data["candidates"]) > 0:
+            generated_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            # Append link
+            final_post = generated_text + f"\n\n🔗 لقراءة المقال كاملاً:\n{article_url}"
+            print("Successfully generated LinkedIn post via Gemini.")
+            return final_post
+        else:
+            print("Unexpected response from Gemini API:", data)
+            return None
+    except Exception as e:
+        print(f"Error generating LinkedIn summary with Gemini: {e}")
+        return None
+
+def publish_to_linkedin(text):
+    if not LINKEDIN_ACCESS_TOKEN or not LINKEDIN_AUTHOR_URN:
+        print("LinkedIn credentials not found. Skipping publishing.")
+        return False
+        
+    url = "https://api.linkedin.com/v2/ugcPosts"
+    headers = {
+        "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
+        "Content-Type": "application/json",
+        "X-Restli-Protocol-Version": "2.0.0"
+    }
+    
+    # User URN format must be urn:li:person:XXXXXX
+    author = LINKEDIN_AUTHOR_URN
+    if not author.startswith("urn:li:person:"):
+        author = f"urn:li:person:{author}"
+        
+    payload = {
+        "author": author,
+        "lifecycleState": "PUBLISHED",
+        "specificContent": {
+            "com.linkedin.ugc.ShareContent": {
+                "shareCommentary": {
+                    "text": text
+                },
+                "shareMediaCategory": "NONE"
+            }
+        },
+        "visibility": {
+            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+        }
+    }
+    
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=30)
+        if response.status_code == 201:
+            print("Successfully published to LinkedIn!")
+            return True
+        else:
+            print(f"Failed to publish to LinkedIn. Status Code: {response.status_code}")
+            print(f"Response: {response.text}")
+            return False
+    except Exception as e:
+        print(f"Error publishing to LinkedIn: {e}")
+        return False
 
 def update_index(articles):
     if not os.path.exists(INDEX_PATH):
@@ -136,6 +224,20 @@ def main():
                 art = generate_article(row, template)
                 if art:
                     articles_data.append(art)
+                    
+                    # --- Generate and Publish to LinkedIn ---
+                    try:
+                        full_content = row[6] # Index 6 is the Content based on generate_article mapping
+                        article_url = f"https://domanid.com/articles/{art['slug']}.html"
+                        print("Generating LinkedIn summary via AI...")
+                        linkedin_post = generate_linkedin_post(full_content, article_url)
+                        if linkedin_post:
+                            print("Publishing to LinkedIn...")
+                            publish_to_linkedin(linkedin_post)
+                    except Exception as linkedin_error:
+                        print(f"Non-critical Error during LinkedIn publishing: {linkedin_error}")
+                    # ---------------------------------------
+                    
                     if APPS_SCRIPT_URL:
                         sheet_row = i + 1
                         try:
