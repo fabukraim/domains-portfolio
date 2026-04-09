@@ -259,10 +259,14 @@ def main():
             
             if (found_any and i == (sheet_row - 1)) or status == "posted":
                 if len(row) >= 8:
-                    all_posted_articles.append({
-                        "title": row[0], "slug": row[1], "category": row[2], 
-                        "date": row[3], "excerpt": row[5]
-                    })
+                    expected_filepath = os.path.join(ARTICLES_DIR, f"{row[1]}.html")
+                    if os.path.exists(expected_filepath):
+                        all_posted_articles.append({
+                            "title": row[0], "slug": row[1], "category": row[2], 
+                            "date": row[3], "excerpt": row[5]
+                        })
+                    else:
+                        print(f"Skipping {row[1]} from index: HTML file was manually deleted.")
         
         if all_posted_articles:
             all_posted_articles.reverse() # SORT: LATEST FIRST
