@@ -110,12 +110,12 @@ Article:
                 continue # Try next model
                 
             data = response.json()
-        if "candidates" in data and len(data["candidates"]) > 0:
-            generated_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-            # Append link
-            final_post = generated_text + f"\n\n🔗 Read the full article here:\n{article_url}"
-            print("Successfully generated LinkedIn post via Gemini.")
-            return final_post
+            if "candidates" in data and len(data["candidates"]) > 0:
+                generated_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                # Append link
+                final_post = generated_text + f"\n\n🔗 Read the full article here:\n{article_url}"
+                print("Successfully generated LinkedIn post via Gemini.")
+                return final_post
         except Exception as e:
             print(f"Error generating LinkedIn summary with {model}: {e}")
             last_error = str(e)
