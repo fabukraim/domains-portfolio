@@ -1,1 +1,6 @@
-Exception: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer AQXPdZfSVpI4ZbYwuWel65oDR-0xf5tyJ0ki3fzuBqZuD5AhXV6e3CmqC-0FdjXZxeaX6gT48WVNxHpMCOpkX3HQbDXBG0XI-ozAlOfHaG1_8Pp2jVqnGHWpj0uuo1itgRyEXrlj7XgVaKEoS4ecJeNfrT_mRSFgHbEOB2wrzpp3IKfh2eUn-LMzAN7LjHq7JYlO-OhmZ5TunOUaDno03O6kKxLIH-FALgx4U3YV0fd8B1GbiIF2-6dIb86gkjybAp_TOZze7jWZv_UBzull-FL4lbNVhyGfsbxtarmP_dWZSmBESKFg8x_v8m-iXfM__u-Z784IuX3Q0znj6RHySA-xMP0FNA\n'
+Status: 201
+Response: {"id":"urn:li:share:7449889799429267457"}
+LinkedIn Post Text Used: None
+Article URL Used: https://domanid.com/articles/scaling-domain-business-reinvestment-blueprint.html
+Token present? True
+URN present? True
