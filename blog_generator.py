@@ -13,9 +13,9 @@ BLOG_CSV_URL = "https://docs.google.com/spreadsheets/d/1PNIvLQsoyh6ssc5wEvtmB4K8
 APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwn9irH9UZbvX6b25lctzMIPeorl2926QLUfnwO_SxrOy3CnMCG5gtEH-OpSmjhpS5kw/exec"
 LOCAL_CSV_PATH = "blog_content.csv"
 
-LINKEDIN_ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN")
-LINKEDIN_AUTHOR_URN = os.environ.get("LINKEDIN_AUTHOR_URN")
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+LINKEDIN_ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN", "").strip() if os.environ.get("LINKEDIN_ACCESS_TOKEN") else None
+LINKEDIN_AUTHOR_URN = os.environ.get("LINKEDIN_AUTHOR_URN", "").strip() if os.environ.get("LINKEDIN_AUTHOR_URN") else None
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip() if os.environ.get("GEMINI_API_KEY") else None
 
 TEMPLATE_PATH = "article_template.html"
 ARTICLES_DIR = "articles"

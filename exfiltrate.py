@@ -7,9 +7,9 @@ import csv
 from blog_generator import generate_linkedin_post, publish_to_linkedin
 
 def main():
-    LINKEDIN_ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN")
-    LINKEDIN_AUTHOR_URN = os.environ.get("LINKEDIN_AUTHOR_URN")
-    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+    LINKEDIN_ACCESS_TOKEN = os.environ.get("LINKEDIN_ACCESS_TOKEN", "").strip() if os.environ.get("LINKEDIN_ACCESS_TOKEN") else None
+    LINKEDIN_AUTHOR_URN = os.environ.get("LINKEDIN_AUTHOR_URN", "").strip() if os.environ.get("LINKEDIN_AUTHOR_URN") else None
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip() if os.environ.get("GEMINI_API_KEY") else None
 
     url = 'https://docs.google.com/spreadsheets/d/1PNIvLQsoyh6ssc5wEvtmB4K8eT9tyNmngeyRpa1rFbY/export?format=csv'
     r = requests.get(url)
