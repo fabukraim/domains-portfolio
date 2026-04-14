@@ -79,8 +79,9 @@ def generate_linkedin_post(content, article_url):
         return None
         
     prompt = f"""
-قم بقراءة المقال التالي وتلخيصه في منشور جذاب على LinkedIn (حوالي 500 كلمة).
+قم بقراءة المقال التالي وتلخيصه في منشور جذاب على LinkedIn (بين 100 إلى 150 كلمة كحد أقصى، لتجنب تجاوز الحد المسموح به لمنشورات لينكد إن).
 استخدم أسلوب احترافي، أضف hook (سطر أول يجذب الانتباه)، وقم بتسليط الضوء على النقاط الرئيسية في المقال بأسلوب شيق يشجع القارئ على قراءة المقال الكامل.
+ملاحظة هامة جداً: لا تستخدم تنسيقات Markdown (مثل النجمتين العريضتين ** أو الشرطات الطويلة)، فقط نص عادي وأسطر جديدة حيث أن لينكد إن لا يدعمها.
 ضع فواصل ومسافات كافية بين الفقرات ليسهل قراءتها، وضع هاشتاقات مناسبة في النهاية.
 في نهاية المنشور، اكتب عبارة تدعو القارئ لمعرفة التفاصيل عبر الرابط. 
 
@@ -94,6 +95,8 @@ def generate_linkedin_post(content, article_url):
     
     try:
         response = requests.post(api_url, headers={"Content-Type": "application/json"}, json=payload, timeout=60)
+        if response.status_code != 200:
+            print("Gemini API Error:", response.text)
         response.raise_for_status()
         data = response.json()
         if "candidates" in data and len(data["candidates"]) > 0:
