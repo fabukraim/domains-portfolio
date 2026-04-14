@@ -1,21 +1,37 @@
 import os
 import requests
 import json
-import time
+import io
+import csv
+
+from blog_generator import generate_linkedin_post, publish_to_linkedin
 
 def main():
-    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "").strip() if os.environ.get("GEMINI_API_KEY") else None
-
-    with open("error_log.txt", "w", encoding="utf-8") as out:
-        out.write(f"Timestamp: {time.time()}\n")
-        
-        url = f"https://generativelanguage.googleapis.com/v1beta/models?key={GEMINI_API_KEY}"
-        try:
-            resp = requests.get(url, timeout=60)
-            out.write(f"Get Models Status: {resp.status_code}\n")
-            out.write(f"Response: {resp.text}\n\n")
-        except Exception as e:
-            out.write(f"Exception: {e}\n\n")
+    
+    url = 'https://docs.google.com/spreadsheets/d/1PNIvLQsoyh6ssc5wEvtmB4K8eT9tyNmngeyRpa1rFbY/export?format=csv'
+    r = requests.get(url)
+    r.encoding = 'utf-8'
+    f = io.StringIO(r.text)
+    cr = csv.reader(f)
+    rows = list(cr)
+    
+    # Get the latest article, rows[-1]
+    last_row = rows[-1]
+    title, slug, category, date, author, excerpt, content = last_row[:7]
+    article_url = f"https://domanid.com/articles/{slug}.html"
+    
+    print(f"Testing with article: {title} - {article_url}")
+    
+    linkedin_post = generate_linkedin_post(content, article_url)
+    if linkedin_post:
+        print("Publishing to LinkedIn...")
+        success = publish_to_linkedin(linkedin_post, article_url)
+        if success:
+            print("TEST WAS SUCCESSFUL!")
+        else:
+            print("Failed to publish to LinkedIn.")
+    else:
+        print("Failed to generate LinkedIn post.")
 
 if __name__ == "__main__":
     main()
