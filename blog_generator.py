@@ -113,7 +113,7 @@ Article:
         print(f"Error generating LinkedIn summary with Gemini: {e}")
         return None
 
-def publish_to_linkedin(text):
+def publish_to_linkedin(text, article_url):
     if not LINKEDIN_ACCESS_TOKEN or not LINKEDIN_AUTHOR_URN:
         print("LinkedIn credentials not found. Skipping publishing.")
         return False
@@ -138,7 +138,14 @@ def publish_to_linkedin(text):
                 "shareCommentary": {
                     "text": text
                 },
-                "shareMediaCategory": "NONE"
+                "shareMediaCategory": "ARTICLE",
+                "media": [
+                    {
+                        "status": "READY",
+                        "description": {"text": "Read the full article"},
+                        "originalUrl": article_url
+                    }
+                ]
             }
         },
         "visibility": {
@@ -237,7 +244,7 @@ def main():
                         linkedin_post = generate_linkedin_post(full_content, article_url)
                         if linkedin_post:
                             print("Publishing to LinkedIn...")
-                            publish_to_linkedin(linkedin_post)
+                            publish_to_linkedin(linkedin_post, article_url)
                     except Exception as linkedin_error:
                         print(f"Non-critical Error during LinkedIn publishing: {linkedin_error}")
                     # ---------------------------------------
