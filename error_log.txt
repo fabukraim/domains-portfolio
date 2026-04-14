@@ -1,6 +1,11 @@
-Status: 201
-Response: {"id":"urn:li:share:7449889799429267457"}
-LinkedIn Post Text Used: None
-Article URL Used: https://domanid.com/articles/scaling-domain-business-reinvestment-blueprint.html
-Token present? True
-URN present? True
+Testing Gemini
+Gemini Status: 404
+Gemini Response: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+generate_linkedin_post returned: None
