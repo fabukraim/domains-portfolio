@@ -89,29 +89,40 @@ At the end of the post, write a call to action inviting the reader to check the 
 Article:
 {content}
 """
-    api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
-    payload = {
-        "contents": [{"parts": [{"text": prompt}]}]
-    }
+    models_to_try = [
+        "gemini-1.5-flash-latest",
+        "gemini-1.5-flash",
+        "gemini-pro"
+    ]
     
-    try:
-        response = requests.post(api_url, headers={"Content-Type": "application/json"}, json=payload, timeout=60)
-        if response.status_code != 200:
-            print("Gemini API Error:", response.text)
-        response.raise_for_status()
-        data = response.json()
+    last_error = None
+    for model in models_to_try:
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}]
+        }
+        
+        try:
+            response = requests.post(api_url, headers={"Content-Type": "application/json"}, json=payload, timeout=60)
+            if response.status_code != 200:
+                print(f"Gemini API Error with {model}:", response.text)
+                last_error = response.text
+                continue # Try next model
+                
+            data = response.json()
         if "candidates" in data and len(data["candidates"]) > 0:
             generated_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
             # Append link
             final_post = generated_text + f"\n\n🔗 Read the full article here:\n{article_url}"
             print("Successfully generated LinkedIn post via Gemini.")
             return final_post
-        else:
-            print("Unexpected response from Gemini API:", data)
-            return None
-    except Exception as e:
-        print(f"Error generating LinkedIn summary with Gemini: {e}")
-        return None
+        except Exception as e:
+            print(f"Error generating LinkedIn summary with {model}: {e}")
+            last_error = str(e)
+            continue
+            
+    print("All Gemini models failed. Last error:", last_error)
+    return None
 
 def publish_to_linkedin(text, article_url):
     if not LINKEDIN_ACCESS_TOKEN or not LINKEDIN_AUTHOR_URN:
