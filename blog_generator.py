@@ -79,13 +79,14 @@ def generate_linkedin_post(content, article_url):
         return None
         
     prompt = f"""
-قم بقراءة المقال التالي وتلخيصه في منشور جذاب على LinkedIn (بين 100 إلى 150 كلمة كحد أقصى، لتجنب تجاوز الحد المسموح به لمنشورات لينكد إن).
-استخدم أسلوب احترافي، أضف hook (سطر أول يجذب الانتباه)، وقم بتسليط الضوء على النقاط الرئيسية في المقال بأسلوب شيق يشجع القارئ على قراءة المقال الكامل.
-ملاحظة هامة جداً: لا تستخدم تنسيقات Markdown (مثل النجمتين العريضتين ** أو الشرطات الطويلة)، فقط نص عادي وأسطر جديدة حيث أن لينكد إن لا يدعمها.
-ضع فواصل ومسافات كافية بين الفقرات ليسهل قراءتها، وضع هاشتاقات مناسبة في النهاية.
-في نهاية المنشور، اكتب عبارة تدعو القارئ لمعرفة التفاصيل عبر الرابط. 
+Read the following article and summarize it into an engaging LinkedIn post (between 100 to 150 words maximum to avoid LinkedIn UGC post character limits).
+IMPORTANT: THE LINKEDIN POST MUST BE WRITTEN ENTIRELY IN ENGLISH.
+Use a professional tone, add a hook (an attention-grabbing first line), and highlight the key points of the article in an interesting way that encourages the reader to read the full article.
+CRITICAL NOTE: Do NOT use any Markdown formatting (such as ** for bold or dashes), just plain text and new lines, as LinkedIn does not support it natively.
+Add enough spaces and paragraph breaks to make it easy to read, and add appropriate hashtags at the end.
+At the end of the post, write a call to action inviting the reader to check the full details via the link.
 
-المقال:
+Article:
 {content}
 """
     api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
@@ -102,7 +103,7 @@ def generate_linkedin_post(content, article_url):
         if "candidates" in data and len(data["candidates"]) > 0:
             generated_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
             # Append link
-            final_post = generated_text + f"\n\n🔗 لقراءة المقال كاملاً:\n{article_url}"
+            final_post = generated_text + f"\n\n🔗 Read the full article here:\n{article_url}"
             print("Successfully generated LinkedIn post via Gemini.")
             return final_post
         else:
